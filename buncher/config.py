@@ -7,7 +7,7 @@ from pydantic import BaseSettings
 class Config(BaseSettings):
     db_url: str = environ.get(
         "db_url",
-        "sqlite:////home/nortlite/proj/buncher/data.db",
+        "sqlite:///some_data.db",
     )
     service_port: int = int(environ.get("service_port", 3520))
 

@@ -1,11 +1,12 @@
-from models import GetDataError, GetDataResponse, RequestBody
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-from fastapi import status
-import sql
-
-from fastapi import APIRouter
 from datetime import date
+from typing import Any, Dict, List
+
+from fastapi import APIRouter, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
+import sql
+from models import GetDataError, GetDataResponse, RequestBody
 from utils import get_date_from_string
 
 router = APIRouter()
@@ -21,7 +22,7 @@ router = APIRouter()
 async def get_data(body: RequestBody) -> JSONResponse:
     from_date: date = get_date_from_string(body.from_date)
     to_date: date = get_date_from_string(body.to_date)
-    result: dict = await sql.get_data(
+    result: List[Dict[str, Any]] = await sql.get_data(
         selected_columns=body.columns,
         filters=body.filters,
         dates=(from_date, to_date),

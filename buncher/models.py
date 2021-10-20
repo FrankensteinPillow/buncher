@@ -1,7 +1,9 @@
-from typing import List, Dict, Any, Tuple, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple
+
 from pydantic import BaseModel, Field, validator
+
+from sql import ALL_COLUMNS, NOT_NUMERIC_COLS
 from utils import get_date_from_string
-from sql import NOT_NUMERIC_COLS, ALL_COLUMNS
 
 
 class RequestBody(BaseModel):
@@ -17,7 +19,7 @@ class RequestBody(BaseModel):
             "The filter list is represented by the column name and the "
             "compared value. The comparison operation is only available for "
             "strict equality so far."
-        )
+        ),
     )
     from_date: str = Field(
         "0001-01-01",
@@ -27,11 +29,9 @@ class RequestBody(BaseModel):
     to_date: str = Field(
         "9999-12-31",
         description="End date filter",
-        title="End date of filtering date range. Can be 'inf'"
+        title="End date of filtering date range. Can be 'inf'",
     )
-    order_by: Union[
-        Tuple[str, str], Tuple[str], str
-    ] = Field(
+    order_by: Tuple[str, str] = Field(
         (None, None),
         title="Order by column",
         description=(
@@ -40,8 +40,8 @@ class RequestBody(BaseModel):
             "ascending (asc) order"
         ),
     )
-    group_by: Optional[List[str]] = Field(
-        None,
+    group_by: List[str] = Field(
+        [],
         title="Group by columns",
         description="Columns by which values will be grouped",
     )
@@ -64,7 +64,6 @@ class RequestBody(BaseModel):
                     f"'{value[0]}'"
                 )
         return values
-
 
     @validator("from_date")
     def from_date_validator(cls, value: str) -> str:
@@ -99,7 +98,7 @@ class RequestBody(BaseModel):
                 raise ValueError(f"Column '{value[0]}' not found")
             if len(value) == 2:
                 if value[1] not in ("asc", "desc"):
-                    raise ValueError(f"Must be 'asc' or 'desc'")
+                    raise ValueError("Must be 'asc' or 'desc'")
                 return value
             return value[0], "asc"
         else:
