@@ -94,11 +94,8 @@ async def get_data(
     order: str = column_sort_by[0]
     if column_sort_by[1]:
         order = text(f"{column_sort_by[0]} {column_sort_by[1]}")
-    print(query)
-    print("-" * 40)
     query = query.order_by(order)
     sbqry: Subquery = query.subquery("all_data")
     query = select(*_get_selected_columns(selected_columns, sbqry.columns))
-    print(query)
     rows = await database.fetch_all(query)
     return [dict(r) for r in rows]
