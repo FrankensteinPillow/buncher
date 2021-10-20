@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from pydantic import BaseModel, Field, validator
 
@@ -31,7 +31,7 @@ class RequestBody(BaseModel):
         description="End date filter",
         title="End date of filtering date range. Can be 'inf'",
     )
-    order_by: Tuple[str, str] = Field(
+    order_by: Union[Tuple[str, str], Tuple[str], str] = Field(
         (None, None),
         title="Order by column",
         description=(
