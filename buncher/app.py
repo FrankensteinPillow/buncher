@@ -1,5 +1,6 @@
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
+
 from config import get_config
 from routes import router
 from sql import database
